@@ -60,7 +60,7 @@ removeFromLocalSettings "/\$wgSiteNotice = '================ MWM Safe Mode =====
 source ./cli/lib/waitForMariaDB.sh
 
 echo "Create database and user..."
-podman exec $APACHE_CONTAINER_NAME bash -c \
+containerExec $APACHE_CONTAINER_NAME bash -c \
   "mysql -h $MYSQL_HOST -u root -p$MARIADB_ROOT_PASSWORD \
   -e \" CREATE DATABASE $DATABASE_NAME;
         CREATE USER '$MYSQL_USER'@'%' IDENTIFIED BY '$WG_DB_PASSWORD';
@@ -68,7 +68,7 @@ podman exec $APACHE_CONTAINER_NAME bash -c \
         FLUSH PRIVILEGES;\""
 
 echo "Import database..."
-podman exec $APACHE_CONTAINER_NAME /bin/bash -c \
+containerExec $APACHE_CONTAINER_NAME /bin/bash -c \
   "mysql -h $MYSQL_HOST -u $MYSQL_USER -p$WG_DB_PASSWORD \
   mediawiki < /var/www/html/w/db.sql"
 
@@ -87,7 +87,7 @@ source ./cli/manage-content/inject-manage-page-from-mediawiki.org.sh
 ##########
 
 echo "Initialize restic backup repository"
-podman exec $APACHE_CONTAINER_NAME /bin/bash -c \
+containerExec $APACHE_CONTAINER_NAME /bin/bash -c \
   "restic --password-file /var/www/restic_password --verbose init --repo /var/www/html/restic-repo"
 
 ### >>>

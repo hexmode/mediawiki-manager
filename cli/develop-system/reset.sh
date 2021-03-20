@@ -4,7 +4,7 @@ source ./cli/lib/utils.sh
 
 ./cli/manage-system/stop.sh
 
-podman pod rm mwm
+packRm mwm
 
 sudo rm -rf \
     mediawiki_root/* \

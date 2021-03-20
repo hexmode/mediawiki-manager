@@ -1,11 +1,11 @@
 #!/bin/bash
 
+topDir=`git rev-parse --show-toplevel`
+source $topDir/cli/lib/utils.sh
+
 # This script is used in the context of https://mwstake.org/mwstake/wiki/MWStake_MediaWiki_Manager#ALcontainerization:_Docker
 
-MWM_MEDIAWIKI_CONTAINER_ID=$(podman run \
-  --restart=no \
-  --detach \
-  --rm=true \
+MWM_MEDIAWIKI_CONTAINER_ID=$(containerStart run \
   dataspects/mediawiki:1.35.0-2103040820)
 declare -a vols=(
   "/var/www/html/w/LocalSettings.php"
@@ -16,9 +16,9 @@ declare -a vols=(
 )
 for vol in "${vols[@]}"
 do
-  podman cp $MWM_MEDIAWIKI_CONTAINER_ID:$vol $MEDIAWIKI_ROOT/w
+  containerCopyFrom $MWM_MEDIAWIKI_CONTAINER_ID $vol $MEDIAWIKI_ROOT/w
 done
-podman stop $MWM_MEDIAWIKI_CONTAINER_ID
+containerStop $MWM_MEDIAWIKI_CONTAINER_ID
 
 # FIXME
 sudo chmod -R 777 $MEDIAWIKI_ROOT/w

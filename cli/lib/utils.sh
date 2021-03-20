@@ -1,5 +1,8 @@
 #!/bin/bash
 
+topDir=`git rev-parse --show-toplevel`
+source $topDir/cli/lib/utils.sh
+
 # CURL utils
 OPTION_INSECURE=--insecure
 cookie_jar="wikicj"
@@ -43,13 +46,13 @@ removeFromLocalSettings () {
 
 # Public MWMBashFunction
 runMWUpdatePHP () {
-    podman exec $APACHE_CONTAINER_NAME /bin/bash -c \
+    containerExec $APACHE_CONTAINER_NAME /bin/bash -c \
         'cd w; php maintenance/update.php --quick'
 }
 
 # Public MWMBashFunction
 runSMWRebuildData () {
-    podman exec $APACHE_CONTAINER_NAME /bin/bash -c \
+    containerExec $APACHE_CONTAINER_NAME /bin/bash -c \
         'cd w; php extensions/SemanticMediaWiki/maintenance/rebuildData.php'
 }
 
@@ -67,3 +70,4 @@ promptToContinue () {
 backupLocalSettingsPHP () {
     cp mediawiki_root/w/LocalSettings.php mediawiki_root/w/LocalSettings.php.bak
 }
+

@@ -18,6 +18,6 @@ source ./envs/my-new-system.env
 #     sed -E "s/#{1,}${dockerDirectives[$dd]}/${dockerDirectives[$dd]}/g" docker-compose.yml.bak > docker-compose.yml
 # done
 
-podman pod start mwm
+packStart ./envs/my-new-system.env mwm
 
 source ./cli/lib/waitForMariaDB.sh

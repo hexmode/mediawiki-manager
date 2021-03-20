@@ -1,3 +1,6 @@
 #!/bin/bash
 
-podman pod stop mwm
+topDir=`git rev-parse --show-toplevel`
+source $topDir/cli/lib/utils.sh
+
+packStop - mwm
